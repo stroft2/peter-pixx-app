@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Peter Pixx</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  <script type="importmap">
+{
+  "imports": {
+    "react/": "https://esm.sh/react@^19.1.0/",
+    "react": "https://esm.sh/react@^19.1.0",
+    "react-dom/": "https://esm.sh/react-dom@^19.1.0/",
+    "@google/genai": "https://esm.sh/@google/genai@^1.10.0",
+    "react-image-crop": "https://esm.sh/react-image-crop@^11.0.6"
+  }
+}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://esm.sh/react-image-crop@^11.0.6/dist/ReactCrop.css" />
+<style>
+:root {
+    --cursor-size: 8px;
+    --cursor-glow: 50px;
+}
+
+html {
+    cursor: none;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #03010f;
+    background: 
+        radial-gradient(ellipse at 20% 80%, rgba(168, 85, 247, 0.2) 0%, transparent S60%),
+        radial-gradient(ellipse at 80% 30%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
+        radial-gradient(ellipse at 50% 50%, rgba(236, 72, 153, 0.1) 0%, transparent 70%),
+        #03010f;
+    background-size: 200% 200%;
+    min-height: 100vh;
+    animation: move-nebula 120s ease-in-out infinite alternate;
+    overflow-x: hidden;
+}
+
+/* --- Typography Enhancements --- */
+h1, h2, h3 {
+    letter-spacing: -0.02em;
+}
+body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+
+/* --- Animated Starfield Background --- */
+@keyframes move-stars {
+  from { transform: translateY(0px); }
+  to { transform: translateY(-2000px); }
+}
+
+.stars, .stars2, .stars3 {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 200%; /* Make height larger to avoid empty space during animation */
+  z-index: -10;
+}
+.stars {
+  background-image: radial-gradient(1px 1px at 20px 30px, #eee, rgba(0,0,0,0)), radial-gradient(1px 1px at 40px 70px, #fff, rgba(0,0,0,0)), radial-gradient(1px 1px at 50px 160px, #ddd, rgba(0,0,0,0)), radial-gradient(1px 1px at 90px 40px, #fff, rgba(0,0,0,0)), radial-gradient(2px 2px at 130px 80px, #fff, rgba(0,0,0,0)), radial-gradient(2px 2px at 160px 120px, #ddd, rgba(0,0,0,0));
+  background-repeat: repeat;
+  background-size: 200px 200px;
+  animation: move-stars 150s linear infinite;
+}
+.stars2 {
+  background-image: radial-gradient(1px 1px at 10px 90px, #eee, rgba(0,0,0,0)), radial-gradient(2px 2px at 30px 170px, #fff, rgba(0,0,0,0)), radial-gradient(2px 2px at 80px 40px, #ddd, rgba(0,0,0,0)), radial-gradient(1px 1px at 120px 140px, #fff, rgba(0,0,0,0)), radial-gradient(2px 2px at 140px 180px, #fff, rgba(0,0,0,0)), radial-gradient(1px 1px at 190px 150px, #ddd, rgba(0,0,0,0));
+  background-repeat: repeat;
+  background-size: 250px 250px;
+  animation: move-stars 100s linear infinite;
+}
+.stars3 {
+    background-image: radial-gradient(2px 2px at 10px 50px, #fff, rgba(0,0,0,0)), radial-gradient(2px 2px at 40px 100px, #ddd, rgba(0,0,0,0)), radial-gradient(3px 3px at 120px 180px, #fff, rgba(0,0,0,0));
+    background-repeat: repeat;
+    background-size: 300px 300px;
+    animation: move-stars 75s linear infinite;
+}
+
+/* --- Animated Buttons & Panels --- */
+@keyframes shimmer {
+  0% { background-position: -100% 0; }
+  100% { background-position: 200% 0; }
+}
+
+button, .animated-panel {
+    transform-style: preserve-3d;
+    transition: transform 0.25s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.25s ease;
+    will-change: transform;
+    position: relative;
+    overflow: hidden;
+}
+button:hover:not(:disabled)::before, .animated-panel:hover::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 200%;
+    height: 100%;
+    background: linear-gradient(110deg, transparent 20%, rgba(255, 255, 255, 0.1), transparent 80%);
+    animation: shimmer 3s infinite linear;
+    z-index: 1;
+}
+
+button:hover:not(:disabled), .animated-panel:hover {
+    transform: perspective(1000px) rotateX(5deg) rotateY(-3deg) scale(1.03);
+    box-shadow: 0px 10px 30px -5px rgba(0, 0, 0, 0.4);
+}
+
+.custom-cursor .dot {
+    position: fixed;
+    width: var(--cursor-size);
+    height: var(--cursor-size);
+    background: white;
+    border-radius: 50%;
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    z-index: 10000;
+    transition: opacity 0.3s, transform 0.1s ease-out;
+    box-shadow: 0 0 5px white, 0 0 10px white;
+}
+
+.custom-cursor .glow {
+    position: fixed;
+    width: var(--cursor-glow);
+    height: var(--cursor-glow);
+    background: radial-gradient(circle, rgba(168, 85, 247, 0.4) 0%, rgba(168, 85, 247, 0) 60%);
+    border-radius: 50%;
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+    transition: opacity 0.3s, transform 0.3s ease-out;
+}
+
+body:not(:hover) .custom-cursor .dot,
+body:not(:hover) .custom-cursor .glow {
+    opacity: 0;
+}
+
+.hide-cursor {
+    cursor: none;
+}
+.hide-cursor .custom-cursor .dot,
+.hide-cursor .custom-cursor .glow {
+    opacity: 1;
+}
+
+body > .hide-cursor {
+    cursor: none !important;
+}
+
+.edit-hotspot-display {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 2px solid white;
+    box-shadow: 0 0 10px rgba(192, 132, 252, 0.8), 0 0 20px rgba(192, 132, 252, 0.5), inset 0 0 5px rgba(255, 255, 255, 0.5);
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+    animation: pulse-hotspot 2s infinite ease-in-out;
+}
+@keyframes pulse-hotspot {
+    0% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+    50% { transform: translate(-50%, -50%) scale(0.9); opacity: 0.7; }
+    100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+}
+
+
+@keyframes move-nebula {
+    from {
+        background-position: 0% 0%;
+    }
+    to {
+        background-position: 100% 100%;
+    }
+}
+
+.animate-fade-in {
+    animation: fadeIn 0.6s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(15px) scale(0.98); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.ReactCrop__crop-selection {
+  border: 2px dashed rgba(255, 255, 255, 0.8);
+}
+
+.ReactCrop__handle {
+  background-color: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+.scrollbar-hide::-webkit-scrollbar {
+    display: none;
+}
+.scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+/* --- Preview Modal --- */
+.preview-overlay {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0,0,0,0.7);
+    backdrop-filter: blur(20px);
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    animation: fadeIn 0.3s ease;
+}
+.preview-content {
+    background: rgba(10, 5, 25, 0.8);
+    border: 1px solid rgba(192, 132, 252, 0.2);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    width: 100%;
+    max-width: 1200px;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    animation: fadeIn 0.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+.preview-content .preview-media-container {
+    background-color: #000;
+    border-radius: 0.75rem;
+    overflow: hidden;
+    position: relative;
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 300px;
+}
+
+/* --- 3D Spinner --- */
+.spinner-container {
+    perspective: 120px;
+}
+.spinner-cube {
+    width: 2rem;
+    height: 2rem;
+    position: relative;
+    transform-style: preserve-3d;
+    animation: cube-spin 2s infinite linear;
+}
+.spinner-cube > div {
+    background: rgba(168, 85, 247, 0.5);
+    border: 1px solid rgba(192, 132, 252, 0.8);
+    height: 100%;
+    width: 100%;
+    display: block;
+    position: absolute;
+}
+.spinner-cube > div:nth-of-type(1) { transform: translateZ(1rem); }
+.spinner-cube > div:nth-of-type(2) { transform: rotateY(90deg) translateZ(1rem); }
+.spinner-cube > div:nth-of-type(3) { transform: rotateY(180deg) translateZ(1rem); }
+.spinner-cube > div:nth-of-type(4) { transform: rotateY(-90deg) translateZ(1rem); }
+.spinner-cube > div:nth-of-type(5) { transform: rotateX(90deg) translateZ(1rem); }
+.spinner-cube > div:nth-of-type(6) { transform: rotateX(-90deg) translateZ(1rem); }
+
+@keyframes cube-spin {
+    from { transform: rotateX(0deg) rotateY(0deg); }
+    to { transform: rotateX(360deg) rotateY(360deg); }
+}
+
+/* --- Header Logo --- */
+.header-logo {
+    transition: transform 0.3s ease;
+}
+.header-logo:hover {
+    transform: perspective(500px) rotateY(-15deg) scale(1.1);
+}
+.header-logo span {
+    background: linear-gradient(45deg, #a855f7, #ec4899);
+}
+
+/* --- Image Gen Style Glow --- */
+.style-button-active {
+    box-shadow: 0 0 15px rgba(168, 85, 247, 0.6), 0 0 5px rgba(192, 132, 252, 0.8);
+}
+
+
+/* --- Custom Video Player --- */
+.video-container {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #000;
+}
+.video-container video {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+.controls-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 1rem 1.5rem;
+    background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+    opacity: 1;
+    transition: opacity 0.3s ease;
+}
+.video-container.inactive .controls-overlay {
+    opacity: 0;
+    pointer-events: none;
+}
+.seek-bar-container {
+    position: relative;
+    width: 100%;
+    cursor: pointer;
+    padding: 8px 0;
+}
+.seek-bar-track {
+    width: 100%;
+    height: 5px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 3px;
+    position: relative;
+}
+.seek-bar-progress {
+    height: 100%;
+    background: #a855f7;
+    border-radius: 3px;
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+.thumbnail-preview {
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-10px);
+    width: 160px;
+    height: 90px;
+    border: 2px solid white;
+    border-radius: 4px;
+    overflow: hidden;
+    background-color: #000;
+    display: none;
+}
+.seek-bar-container:hover .thumbnail-preview {
+    display: block;
+}
+.thumbnail-preview canvas {
+    width: 100%;
+    height: 100%;
+}
+.volume-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+.volume-slider {
+    width: 0;
+    transition: width 0.2s ease;
+    overflow: hidden;
+}
+.volume-container:hover .volume-slider {
+    width: 80px;
+    margin-left: 8px;
+}
+input[type=range].volume-range {
+  -webkit-appearance: none;
+  width: 100%;
+  background: transparent;
+}
+input[type=range].volume-range:focus {
+  outline: none;
+}
+input[type=range].volume-range::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 4px;
+  cursor: pointer;
+  background: rgba(255,255,255,0.3);
+  border-radius: 2px;
+}
+input[type=range].volume-range::-webkit-slider-thumb {
+  height: 12px;
+  width: 12px;
+  border-radius: 50%;
+  background: #fff;
+  cursor: pointer;
+  -webkit-appearance: none;
+  margin-top: -4px;
+}
+
+.ai-analysis-panel {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    width: 300px;
+    background: rgba(10, 5, 25, 0.85);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(192, 132, 252, 0.2);
+    border-radius: 0.75rem;
+    padding: 1rem;
+    color: #e5e7eb;
+    font-size: 0.875rem;
+    z-index: 20;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+</style>
+  <link rel="stylesheet" href="/index.css">
+</head>
+  <body>
+    <div class="stars"></div>
+    <div class="stars2"></div>
+    <div class="stars3"></div>
+    <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
+  </body>
+</html>
