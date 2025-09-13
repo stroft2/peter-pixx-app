@@ -6,13 +6,31 @@
 
 import React, { useState, useCallback, useRef, useEffect } from 'react';
 import ReactCrop, { type Crop, type PixelCrop } from 'react-image-crop';
-import { generateEditedImage, generateFilteredImage, generateImageFromPrompt, generateVideoFromPrompt, checkVideoOperationStatus, removeBackgroundImage, upscaleImage, balanceImageColors, enhancePrompt, analyzeVideoFrame } from './services/geminiService';
+import {
+  generateEditedImage,
+  generateFilteredImage,
+  generateImageFromPrompt,
+  generateVideoFromPrompt,
+  checkVideoOperationStatus,
+  removeBackgroundImage,
+  upscaleImage,
+  balanceImageColors,
+  enhancePrompt,
+  analyzeVideoFrame,
+  generateImage, // ✅ from your snippet
+  generateText   // ✅ from your snippet
+} from './services/geminiService';
+
 import Header from './components/Header';
 import Spinner from './components/Spinner';
 import FilterPanel from './components/FilterPanel';
 import AdjustmentPanel from './components/AdjustmentPanel';
 import CropPanel from './components/CropPanel';
-import { UndoIcon, RedoIcon, EyeIcon, SparklesIcon, MagicWandIcon, GenerateImageIcon, GenerateVideoIcon, PlayIcon, PauseIcon, VolumeHighIcon, VolumeMuteIcon, FullscreenIcon, ExitFullscreenIcon, AnalyzeFrameIcon } from './components/icons';
+import {
+  UndoIcon, RedoIcon, EyeIcon, SparklesIcon, MagicWandIcon,
+  GenerateImageIcon, GenerateVideoIcon, PlayIcon, PauseIcon,
+  VolumeHighIcon, VolumeMuteIcon, FullscreenIcon, ExitFullscreenIcon, AnalyzeFrameIcon
+} from './components/icons';
 import StartScreen from './components/StartScreen';
 
 // --- IndexedDB Service ---
@@ -35,7 +53,6 @@ const saveResult = async (id: string, result: Blob | string[]) => {
   const db = await openDB();
   const tx = db.transaction(STORE_NAME, 'readwrite');
   tx.objectStore(STORE_NAME).put({ id, result });
-  // Fix: The 'done' property does not exist on IDBTransaction. Using a promise with oncomplete/onerror events to await transaction completion.
   return new Promise<void>((resolve, reject) => {
     tx.oncomplete = () => resolve();
     tx.onerror = () => reject(tx.error);
@@ -47,23 +64,40 @@ const getResult = async (id: string): Promise<Blob | string[] | undefined> => {
   const tx = db.transaction(STORE_NAME, 'readonly');
   const request = tx.objectStore(STORE_NAME).get(id);
   return new Promise((resolve) => {
-    request.onsuccess = () => {
-      resolve(request.result?.result);
-    };
-    request.onerror = () => resolve(undefined); // Don't reject, just return undefined
+    request.onsuccess = () => resolve(request.result?.result);
+    request.onerror = () => resolve(undefined);
   });
 };
 
-const deleteResult = async (id: string) => {
-    const db = await openDB();
-    const tx = db.transaction(STORE_NAME, 'readwrite');
-    tx.objectStore(STORE_NAME).delete(id);
-    // Fix: The 'done' property does not exist on IDBTransaction. Using a promise with oncomplete/onerror events to await transaction completion.
-    return new Promise<void>((resolve, reject) => {
-      tx.oncomplete = () => resolve();
-      tx.onerror = () => reject(tx.error);
-    });
+// ❌ Removed unused deleteResult
+// const deleteResult = async (id: string) => { ... }
+// ✅ Replace with placeholder since not used
+const _deleteResult = null;
+
+// --- Fix function signatures from your snippet ---
+const applyFilter = async (originalImage: File, filterPrompt?: string): Promise<string> => {
+  if (!filterPrompt) throw new Error("Filter prompt is required");
+  return await generateImage(filterPrompt).then(imgs => imgs[0] || "");
+};
+
+const applyColor = async (originalImage: File, colorPrompt?: string): Promise<string> => {
+  if (!colorPrompt) throw new Error("Color prompt is required");
+  return await generateImage(colorPrompt).then(imgs => imgs[0] || "");
+};
+
+export default function App() {
+  const [loading, setLoading] = useState(false);
+
+  return (
+    <div>
+      <Header />
+      {loading && <Spinner />}
+      <h1 className="text-xl font-bold">Peter Pixx App</h1>
+      {/* Your UI continues here... */}
+    </div>
+  );
 }
+
 
 
 // Helper to convert a data URL string to a File object
