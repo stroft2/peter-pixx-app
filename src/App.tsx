@@ -27,9 +27,20 @@ import FilterPanel from './components/FilterPanel';
 import AdjustmentPanel from './components/AdjustmentPanel';
 import CropPanel from './components/CropPanel';
 import {
-  UndoIcon, RedoIcon, EyeIcon, SparklesIcon, MagicWandIcon,
-  GenerateImageIcon, GenerateVideoIcon, PlayIcon, PauseIcon,
-  VolumeHighIcon, VolumeMuteIcon, FullscreenIcon, ExitFullscreenIcon, AnalyzeFrameIcon
+  UndoIcon,
+  RedoIcon,
+  EyeIcon,
+  SparklesIcon,
+  MagicWandIcon,
+  GenerateImageIcon,
+  GenerateVideoIcon,
+  PlayIcon,
+  PauseIcon,
+  VolumeHighIcon,
+  VolumeMuteIcon,
+  FullscreenIcon,
+  ExitFullscreenIcon,
+  AnalyzeFrameIcon,
 } from './components/icons';
 import StartScreen from './components/StartScreen';
 
@@ -655,7 +666,7 @@ const App: React.FC = () => {
             
             const downloadLink = operation.response?.generatedVideos?.[0]?.video?.uri;
             if (downloadLink) {
-                const response = await fetch(`${downloadLink}&key=${import.meta.env.VITE_API_KEY}`);
+                const response = await fetch(`${downloadLink}&key=${import.meta.env.c}`);
                 const blob = await response.blob();
                 await saveResult(mission.id, blob);
                 updateMission(mission.id, { status: 'completed', result: true, progressMessage: "Done!" });
