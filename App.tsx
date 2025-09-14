@@ -686,7 +686,6 @@ const App: React.FC = () => {
             
             const downloadLink = operation.response?.generatedVideos?.[0]?.video?.uri;
             if (downloadLink) {
-                // FIX: Use process.env.API_KEY instead of import.meta.env.VITE_API_KEY as per guidelines.
                 const response = await fetch(`${downloadLink}&key=${process.env.API_KEY}`);
                 const blob = await response.blob();
                 await saveResult(mission.id, blob);

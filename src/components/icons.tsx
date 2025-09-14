@@ -105,6 +105,13 @@ export const MagicWandIcon: React.FC<{ className?: string }> = ({ className }) =
     </svg>
 );
 
+export const MusicIcon: React.FC<{ className?: string }> = ({ className }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={className}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M9 9V4.5M9 9c0 .794.313 1.524.879 2.066M9 9c-.566-.542-.879-1.272-.879-2.066m.001 2.066a2.121 2.121 0 0 1 2.121-2.121m2.121 2.121a2.121 2.121 0 0 0-2.121-2.121M15 15.75a3 3 0 0 1-6 0m6 0a3 3 0 0 0-6 0m6 0v-3.375c0-.621-.504-1.125-1.125-1.125H10.875c-.621 0-1.125.504-1.125 1.125V15.75m6 0v3.375c0 .621-.504 1.125-1.125-1.125H10.875c-.621 0-1.125-.504-1.125-1.125V15.75" />
+    </svg>
+);
+
+
 // Video Player Icons
 export const PlayIcon: React.FC<{ className?: string }> = ({ className }) => (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className={className}>
@@ -140,5 +147,10 @@ export const AnalyzeFrameIcon: React.FC<{ className?: string }> = ({ className }
     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={className}>
       <path strokeLinecap="round" strokeLinejoin="round" d="M9.75 9.75H4.5m4.5 4.5H4.5m4.5 4.5H4.5m13.5-9H15M15 12H9m10.5 4.5H9m10.5 4.5H9" />
       <path strokeLinecap="round" strokeLinejoin="round" d="M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+    </svg>
+);
+export const ErrorIcon: React.FC<{ className?: string }> = ({ className }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={className}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z" />
     </svg>
 );

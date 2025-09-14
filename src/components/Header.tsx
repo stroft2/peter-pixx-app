@@ -64,13 +64,13 @@ interface HeaderProps {
   currentView: 'start' | 'editor' | 'image-gen' | 'video-gen';
   onBackToHome: () => void;
   missions: Mission[];
-  setMissions: React.Dispatch<React.SetStateAction<Mission[]>>;
+  onClearCompleted: () => void;
   onRegenerateMission: (mission: Mission) => void;
   onEditMission: (mission: Mission) => void;
   onSetPreview: (mission: Mission) => void;
 }
 
-const Header: React.FC<HeaderProps> = ({ currentView, onBackToHome, missions, setMissions, onRegenerateMission, onEditMission, onSetPreview }) => {
+const Header: React.FC<HeaderProps> = ({ currentView, onBackToHome, missions, onClearCompleted, onRegenerateMission, onEditMission, onSetPreview }) => {
   const [isPanelOpen, setIsPanelOpen] = useState(false);
   const [expandedMissionId, setExpandedMissionId] = useState<string | null>(null);
   const panelRef = useRef<HTMLDivElement>(null);
@@ -89,11 +89,6 @@ const Header: React.FC<HeaderProps> = ({ currentView, onBackToHome, missions, se
   const handleToggleExpand = (missionId: string) => {
     setExpandedMissionId(prevId => prevId === missionId ? null : missionId);
   }
-
-  const handleClearCompleted = () => {
-    // This logic should be in App.tsx to handle IndexedDB
-    setMissions(prev => prev.filter(m => m.status !== 'completed' && m.status !== 'failed'));
-  };
 
   return (
     <header className="w-full py-3 px-4 sm:px-8 border-b border-purple-500/10 bg-black/30 backdrop-blur-sm sticky top-0 z-50">
@@ -127,7 +122,7 @@ const Header: React.FC<HeaderProps> = ({ currentView, onBackToHome, missions, se
                 <div className="absolute top-full right-0 mt-2 w-80 max-h-[70vh] overflow-y-auto bg-gray-950/80 backdrop-blur-xl border border-purple-500/20 rounded-lg shadow-2xl z-50 animate-fade-in">
                     <div className="p-3 flex justify-between items-center border-b border-purple-500/10 sticky top-0 bg-gray-950/80 backdrop-blur-xl">
                         <h3 className="font-bold text-gray-100">Missions</h3>
-                        <button onClick={handleClearCompleted} className="text-xs text-purple-300/60 hover:text-white transition-colors">Clear Completed</button>
+                        <button onClick={onClearCompleted} className="text-xs text-purple-300/60 hover:text-white transition-colors">Clear Completed</button>
                     </div>
                     {missions.length === 0 ? (
                         <p className="p-4 text-center text-sm text-purple-300/40">No missions yet.</p>

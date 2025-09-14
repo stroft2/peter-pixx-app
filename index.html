@@ -6,21 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Peter Pixx</title>
     <script src="https://cdn.tailwindcss.com"></script>
-  <script type="importmap">
-{
-  "imports": {
-    "react/": "https://esm.sh/react@^19.1.0/",
-    "react": "https://esm.sh/react@^19.1.0",
-    "react-dom/": "https://esm.sh/react-dom@^19.1.0/",
-    "@google/genai": "https://esm.sh/@google/genai@^1.10.0",
-    "react-image-crop": "https://esm.sh/react-image-crop@^11.0.6"
-  }
-}
-</script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://esm.sh/react-image-crop@^11.0.6/dist/ReactCrop.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 :root {
     --cursor-size: 8px;
@@ -100,6 +88,11 @@ button, .animated-panel {
     will-change: transform;
     position: relative;
     overflow: hidden;
+    background-size: 200% 100%;
+}
+button:hover:not(:disabled), .animated-panel:hover {
+    transform: perspective(1000px) rotateX(5deg) rotateY(-3deg) scale(1.03);
+    box-shadow: 0px 10px 30px -5px rgba(0, 0, 0, 0.4);
 }
 button:hover:not(:disabled)::before, .animated-panel:hover::before {
     content: '';
@@ -113,10 +106,13 @@ button:hover:not(:disabled)::before, .animated-panel:hover::before {
     z-index: 1;
 }
 
-button:hover:not(:disabled), .animated-panel:hover {
-    transform: perspective(1000px) rotateX(5deg) rotateY(-3deg) scale(1.03);
-    box-shadow: 0px 10px 30px -5px rgba(0, 0, 0, 0.4);
+button.gradient-button {
+    transition: background-position 0.5s ease;
 }
+button.gradient-button:hover:not(:disabled) {
+    background-position: 100% 0;
+}
+
 
 .custom-cursor .dot {
     position: fixed;
@@ -428,14 +424,61 @@ input[type=range].volume-range::-webkit-slider-thumb {
     box-shadow: 0 10px 30px rgba(0,0,0,0.5);
 }
 
+/* --- Editor Tab Slider --- */
+.editor-tabs-container {
+    position: relative;
+}
+.editor-tab-slider {
+    position: absolute;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background: linear-gradient(to right, #8b5cf6, #a855f7);
+    border-radius: 0.5rem;
+    transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1), width 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+    z-index: 0;
+    box-shadow: 0 4px 15px rgba(168, 85, 247, 0.3);
+}
+
+/* --- API Error Toast --- */
+.api-error-toast {
+    position: fixed;
+    top: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.5rem;
+    background-color: #261a30;
+    border: 1px solid rgba(236, 72, 153, 0.3);
+    border-radius: 0.75rem;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    max-width: 90%;
+    width: 600px;
+    backdrop-filter: blur(10px);
+    animation: fadeIn 0.3s ease-out;
+}
 </style>
-  <link rel="stylesheet" href="/index.css">
+  <script type="importmap">
+{
+  "imports": {
+    "react": "https://aistudiocdn.com/react@^19.1.1",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.1.1/",
+    "react/": "https://aistudiocdn.com/react@^19.1.1/",
+    "react-image-crop": "https://aistudiocdn.com/react-image-crop@^11.0.10",
+    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.19.0",
+    "react-image-crop/": "https://aistudiocdn.com/react-image-crop@^11.0.10/"
+  }
+}
+</script>
 </head>
   <body>
     <div class="stars"></div>
     <div class="stars2"></div>
     <div class="stars3"></div>
     <div id="root"></div>
-    <script type="module" src="/index.tsx"></script>
+    <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

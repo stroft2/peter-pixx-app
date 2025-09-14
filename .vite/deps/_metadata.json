@@ -1,0 +1,40 @@
+{
+  "hash": "b9a81111",
+  "configHash": "43b89963",
+  "lockfileHash": "2a839959",
+  "browserHash": "702d7b87",
+  "optimized": {
+    "@google/genai": {
+      "src": "../../node_modules/@google/genai/dist/web/index.mjs",
+      "file": "@google_genai.js",
+      "fileHash": "2bc1477e",
+      "needsInterop": false
+    },
+    "react": {
+      "src": "../../node_modules/react/index.js",
+      "file": "react.js",
+      "fileHash": "6f09b465",
+      "needsInterop": true
+    },
+    "react-dom/client": {
+      "src": "../../node_modules/react-dom/client.js",
+      "file": "react-dom_client.js",
+      "fileHash": "49dfeec5",
+      "needsInterop": true
+    },
+    "react-image-crop": {
+      "src": "../../node_modules/react-image-crop/dist/index.js",
+      "file": "react-image-crop.js",
+      "fileHash": "f936f987",
+      "needsInterop": false
+    }
+  },
+  "chunks": {
+    "chunk-3VDXVL42": {
+      "file": "chunk-3VDXVL42.js"
+    },
+    "chunk-5WRI5ZAA": {
+      "file": "chunk-5WRI5ZAA.js"
+    }
+  }
+}
