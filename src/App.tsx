@@ -21,7 +21,7 @@ import {
   generateText   // ✅ from your snippet
 } from './services/geminiService';
 
-import Header from './components/Header';
+import Header from './components/Header.tsx';
 import Spinner from './components/Spinner';
 import FilterPanel from './components/FilterPanel';
 import AdjustmentPanel from './components/AdjustmentPanel';
